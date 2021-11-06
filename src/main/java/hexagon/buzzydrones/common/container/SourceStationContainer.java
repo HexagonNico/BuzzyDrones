@@ -45,6 +45,7 @@ public class SourceStationContainer extends Container {
         return this.inventory.stillValid(player);
     }
 
+    @Override
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -69,6 +70,7 @@ public class SourceStationContainer extends Container {
         return itemstack;
     }
 
+    @Override
     public void removed(PlayerEntity playerIn) {
         super.removed(playerIn);
         this.inventory.stopOpen(playerIn);

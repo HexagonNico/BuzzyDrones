@@ -99,10 +99,10 @@ public class TargetStationTileEntity extends AbstractStationTileEntity implement
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (facing == Direction.UP)
+        if(!this.remove && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if(facing == Direction.UP)
                 return handlers[0].cast();
-            else if (facing == Direction.DOWN)
+            else if(facing == Direction.DOWN)
                 return handlers[1].cast();
             else
                 return handlers[2].cast();

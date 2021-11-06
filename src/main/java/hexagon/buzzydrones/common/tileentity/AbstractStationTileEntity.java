@@ -4,11 +4,15 @@ import hexagon.buzzydrones.common.block.AbstractStationBlock;
 import hexagon.buzzydrones.common.entity.DroneEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesItems;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -124,5 +128,21 @@ public abstract class AbstractStationTileEntity extends LockableLootTileEntity i
         if(this.droneEntity != null) this.droneEntity.writeInterestingData(this.droneNbtFix);
         compound.put("Drone", this.droneNbtFix);
         return compound;
+    }
+    
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.worldPosition, 1, this.getUpdateTag());
+    }
+    
+    @Override
+    public CompoundNBT getUpdateTag() {
+        return this.save(new CompoundNBT());
+    }
+    
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        this.load(this.getBlockState(), pkt.getTag());
     }
 }

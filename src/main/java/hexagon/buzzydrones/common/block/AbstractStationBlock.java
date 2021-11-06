@@ -7,14 +7,21 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public abstract class AbstractStationBlock extends Block {
 
@@ -46,6 +53,16 @@ public abstract class AbstractStationBlock extends Block {
     }
 
     protected abstract TileEntity getTileEntity();
+    
+    @Override
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+        if(!level.isClientSide && player instanceof ServerPlayerEntity) {
+            TileEntity blockEntity = level.getBlockEntity(pos);
+            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) blockEntity, packetBuffer -> packetBuffer.writeBlockPos(pos));
+            return ActionResultType.CONSUME;
+        }
+        return ActionResultType.SUCCESS;
+    }
 
     @Override
     public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
