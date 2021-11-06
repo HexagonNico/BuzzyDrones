@@ -17,7 +17,7 @@ public class BuzzyDronesEntities {
     
     public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITIES, BuzzyDrones.ID);
     
-    public static final RegistryObject<EntityType<DroneEntity>> DRONE = REGISTER.register("drone", () -> EntityType.Builder.<DroneEntity>of(DroneEntity::new, EntityClassification.MISC).build("drone"));
+    public static final RegistryObject<EntityType<DroneEntity>> DRONE = REGISTER.register("drone", () -> EntityType.Builder.<DroneEntity>of(DroneEntity::new, EntityClassification.MISC).sized(0.7f, 0.6f).clientTrackingRange(8).build("drone"));
     
     public static void registerRenders() {
         RenderingRegistry.registerEntityRenderingHandler(DRONE.get(), DroneRenderer::new);
