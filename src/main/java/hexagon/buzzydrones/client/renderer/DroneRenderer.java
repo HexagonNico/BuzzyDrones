@@ -1,12 +1,13 @@
 package hexagon.buzzydrones.client.renderer;
 
+import hexagon.buzzydrones.common.entity.DroneEntity;
+import hexagon.buzzydrones.core.BuzzyDrones;
+
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import hexagon.buzzydrones.BuzzyDrones;
-import hexagon.buzzydrones.entity.DroneEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class DroneRenderer extends MobRenderer<DroneEntity, DroneModel<DroneEntity>> {

@@ -1,18 +1,19 @@
 package hexagon.buzzydrones.client.gui.screen;
 
+import hexagon.buzzydrones.common.container.SourceStationContainer;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import hexagon.buzzydrones.container.DroneSourceContainer;
 
-public class SourceGuiScreen extends ContainerScreen<DroneSourceContainer> {
+public class SourceGuiScreen extends ContainerScreen<SourceStationContainer> {
 
     private static final ResourceLocation HOPPER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/hopper.png");
 
-    public SourceGuiScreen(DroneSourceContainer container, PlayerInventory playerInventory, ITextComponent title) {
+    public SourceGuiScreen(SourceStationContainer container, PlayerInventory playerInventory, ITextComponent title) {
         super(container, playerInventory, title);
         this.passEvents = false;
         this.imageHeight = 133;

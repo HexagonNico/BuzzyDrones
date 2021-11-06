@@ -1,11 +1,15 @@
 package hexagon.buzzydrones.client.renderer;
 
+import hexagon.buzzydrones.common.entity.DroneEntity;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import hexagon.buzzydrones.entity.DroneEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class DroneModel<T extends DroneEntity> extends EntityModel<T> {
 
     private final ModelRenderer modelRenderer;

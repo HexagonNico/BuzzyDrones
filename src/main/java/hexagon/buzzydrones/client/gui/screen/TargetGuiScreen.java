@@ -1,5 +1,8 @@
 package hexagon.buzzydrones.client.gui.screen;
 
+import hexagon.buzzydrones.common.container.TargetStationContainer;
+import hexagon.buzzydrones.core.BuzzyDrones;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -7,14 +10,12 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import hexagon.buzzydrones.BuzzyDrones;
-import hexagon.buzzydrones.container.DroneTargetContainer;
 
-public class TargetGuiScreen extends ContainerScreen<DroneTargetContainer> {
+public class TargetGuiScreen extends ContainerScreen<TargetStationContainer> {
 
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(BuzzyDrones.ID, "textures/gui/target.png");
 
-    public TargetGuiScreen(DroneTargetContainer container, PlayerInventory playerInventory, ITextComponent title) {
+    public TargetGuiScreen(TargetStationContainer container, PlayerInventory playerInventory, ITextComponent title) {
         super(container, playerInventory, title);
         this.passEvents = false;
         this.imageHeight = 133;

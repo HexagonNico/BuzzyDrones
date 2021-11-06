@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "buzzydrones:block/source_station"
+    },
+    "facing=east": {
+      "y": 90,
+      "model": "buzzydrones:block/source_station"
+    },
+    "facing=south": {
+      "y": 180,
+      "model": "buzzydrones:block/source_station"
+    },
+    "facing=west": {
+      "y": 270,
+      "model": "buzzydrones:block/source_station"
+    }
+  }
+}
