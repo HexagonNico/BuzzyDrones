@@ -2,8 +2,11 @@ package hexagon.buzzydrones.common.item;
 
 import hexagon.buzzydrones.common.entity.DroneEntity;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -17,6 +20,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class DroneItem extends Item {
 
     private final int type;
@@ -42,7 +47,7 @@ public class DroneItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if(this.type == DroneEntity.BASIC) {
             tooltip.add(new TranslationTextComponent("item.buzzydrones.drone_basic_description").withStyle(TextFormatting.GRAY));
         } else if(this.type == DroneEntity.PICK_UP) {

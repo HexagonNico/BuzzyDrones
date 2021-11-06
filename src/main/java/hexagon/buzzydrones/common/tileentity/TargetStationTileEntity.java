@@ -3,8 +3,11 @@ package hexagon.buzzydrones.common.tileentity;
 import hexagon.buzzydrones.common.container.TargetStationContainer;
 import hexagon.buzzydrones.core.registry.BuzzyDronesTileEntities;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
@@ -20,6 +23,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class TargetStationTileEntity extends AbstractStationTileEntity implements ISidedInventory {
 
     public TargetStationTileEntity() {
@@ -81,7 +86,7 @@ public class TargetStationTileEntity extends AbstractStationTileEntity implement
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
         return index != 5;
     }
 
@@ -96,7 +101,8 @@ public class TargetStationTileEntity extends AbstractStationTileEntity implement
     }
 
     LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-
+    
+    @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if(!this.remove && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {

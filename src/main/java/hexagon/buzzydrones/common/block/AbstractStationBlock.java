@@ -2,6 +2,9 @@ package hexagon.buzzydrones.common.block;
 
 import hexagon.buzzydrones.common.tileentity.AbstractStationTileEntity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -23,6 +26,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public abstract class AbstractStationBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalBlock.FACING;

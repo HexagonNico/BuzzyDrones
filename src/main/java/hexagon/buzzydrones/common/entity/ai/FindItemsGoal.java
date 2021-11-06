@@ -54,8 +54,6 @@ public class FindItemsGoal extends Goal {
     private List<ItemEntity> getNearbyItems(double r) {
         AxisAlignedBB box = this.droneEntity.getBoundingBox().inflate(r);
         return this.droneEntity.level.getEntitiesOfClass(ItemEntity.class, box)
-                .stream().sorted(Comparator.comparingDouble((item) -> {
-                    return item.blockPosition().distSqr(this.droneEntity.blockPosition());
-                })).collect(Collectors.toList());
+                .stream().sorted(Comparator.comparingDouble((item) -> item.blockPosition().distSqr(this.droneEntity.blockPosition()))).collect(Collectors.toList());
     }
 }

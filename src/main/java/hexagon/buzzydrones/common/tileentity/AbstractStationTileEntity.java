@@ -5,7 +5,9 @@ import hexagon.buzzydrones.common.entity.DroneEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesItems;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
@@ -23,6 +25,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public abstract class AbstractStationTileEntity extends LockableLootTileEntity implements ITickableTileEntity {
 
     protected NonNullList<ItemStack> inventory;

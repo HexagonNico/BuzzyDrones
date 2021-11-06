@@ -3,12 +3,14 @@ package hexagon.buzzydrones.common.tileentity;
 import hexagon.buzzydrones.common.container.SourceStationContainer;
 import hexagon.buzzydrones.core.registry.BuzzyDronesTileEntities;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+@MethodsReturnNonnullByDefault
 public class SourceStationTileEntity extends AbstractStationTileEntity {
 
     public SourceStationTileEntity() {

@@ -5,6 +5,9 @@ import hexagon.buzzydrones.core.registry.BuzzyDronesEntities;
 import hexagon.buzzydrones.core.registry.BuzzyDronesItems;
 import hexagon.buzzydrones.utils.NbtHelper;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
@@ -32,6 +35,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class DroneEntity extends CreatureEntity {
 
     private static final DataParameter<Integer> STATUS = EntityDataManager.defineId(DroneEntity.class, DataSerializers.INT);
@@ -113,14 +118,12 @@ public class DroneEntity extends CreatureEntity {
         return false;
     }
 
-    public boolean pickUpAllItems(ItemStack itemStack) {
+    public void pickUpAllItems(ItemStack itemStack) {
         if(!itemStack.isEmpty() && this.carrying.isEmpty()) {
             this.carrying = new ItemStack(itemStack.getItem(), itemStack.getCount());
             this.level.playSound(null, this.position().x(), this.position().y(), this.position().z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             itemStack.setCount(0);
-            return true;
         }
-        return false;
     }
 
     public Item getItemCarried() {
@@ -209,11 +212,7 @@ public class DroneEntity extends CreatureEntity {
     
     @Override
     protected PathNavigator createNavigation(World worldIn) {
-        FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn) {
-            public boolean canEntityStandOnPos(BlockPos pos) {
-                return !this.level.getBlockState(pos.below()).isAir();
-            }
-        };
+        FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn);
         flyingpathnavigator.setCanOpenDoors(false);
         flyingpathnavigator.setCanFloat(false);
         flyingpathnavigator.setCanOpenDoors(true);
