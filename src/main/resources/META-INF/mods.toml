@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+
+[[mods]]
+modId="buzzydrones"
+version="${file.jarVersion}"
+displayName="Buzzy Drones"
+logoFile="buzzydrones.png"
+authors="HexagonNico"
+description='''
+A mod that adds bee-drones to transport items
+'''
+
+[[dependencies.buzzydrones]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.buzzydrones]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="AFTER"
+    side="BOTH"

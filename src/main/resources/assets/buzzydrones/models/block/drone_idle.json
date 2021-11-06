@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "buzzydrones:block/station_end",
+    "side": "buzzydrones:block/station_side"
+  }
+}

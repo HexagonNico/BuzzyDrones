@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "buzzydrones:drone",
+  "ingredients": [
+    {"item": "buzzydrones:drone_pick_up"}
+  ],
+  "result": {
+    "item": "buzzydrones:drone"
+  }
+}
