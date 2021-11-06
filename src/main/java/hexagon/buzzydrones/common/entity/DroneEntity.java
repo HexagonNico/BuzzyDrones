@@ -201,7 +201,12 @@ public class DroneEntity extends CreatureEntity {
     protected SoundEvent getDeathSound() {
         return SoundEvents.ARMOR_STAND_BREAK;
     }
-
+    
+    @Override
+    public boolean causeFallDamage(float f1, float f2) {
+        return false;
+    }
+    
     @Override
     protected PathNavigator createNavigation(World worldIn) {
         FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn) {
