@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "buzzydrones:drone_target"
+          "name": "buzzydrones:source_station"
         }
       ],
       "conditions": [

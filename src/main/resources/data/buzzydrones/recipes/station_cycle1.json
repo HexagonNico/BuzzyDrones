@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "group": "buzzydrones:station",
   "ingredients": [
-    {"item": "buzzydrones:drone_source"}
+    {"item": "buzzydrones:source_station"}
   ],
   "result": {
-    "item": "buzzydrones:drone_target"
+    "item": "buzzydrones:target_station"
   }
 }

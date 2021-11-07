@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "buzzydrones:drone_source"
+          "name": "buzzydrones:idle_station"
         }
       ],
       "conditions": [

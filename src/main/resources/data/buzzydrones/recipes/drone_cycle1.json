@@ -5,6 +5,6 @@
     {"item": "buzzydrones:drone_pick_up"}
   ],
   "result": {
-    "item": "buzzydrones:drone"
+    "item": "buzzydrones:drone_basic"
   }
 }

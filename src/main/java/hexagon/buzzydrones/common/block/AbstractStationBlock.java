@@ -33,7 +33,7 @@ public abstract class AbstractStationBlock extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
     public AbstractStationBlock() {
-        super(Properties.of(Material.METAL).strength(1.2F).sound(SoundType.METAL));
+        super(Properties.of(Material.METAL).strength(3.0f, 4.8f).sound(SoundType.METAL));
         super.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 

@@ -1,0 +1,7 @@
+{
+  "values": [
+    "buzzydrones:source_station",
+    "buzzydrones:target_station",
+    "buzzydrones:idle_station"
+  ]
+}
