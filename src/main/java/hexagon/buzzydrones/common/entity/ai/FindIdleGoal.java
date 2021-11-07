@@ -1,6 +1,6 @@
 package hexagon.buzzydrones.common.entity.ai;
 
-import hexagon.buzzydrones.common.blockentity.IdleStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.IdleStationBlockEntity;
 import hexagon.buzzydrones.common.entity.DroneEntity;
 
 import java.util.List;
@@ -33,18 +33,18 @@ public class FindIdleGoal extends Goal {
 
     @Override
     public void start() {
-        List<IdleStationTileEntity> list = this.getNearbyStations();
+        List<IdleStationBlockEntity> list = this.getNearbyStations();
         if(!list.isEmpty()) {
             this.wanderAround(list.get(0).getBlockPos());
         }
     }
 
-    private List<IdleStationTileEntity> getNearbyStations() {
+    private List<IdleStationBlockEntity> getNearbyStations() {
         BlockPos dronePos = this.droneEntity.blockPosition();
         return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
                 .map(pos -> this.droneEntity.level.getBlockEntity(pos))
-                .filter(tileEntity -> tileEntity instanceof IdleStationTileEntity)
-                .map(tileEntity -> (IdleStationTileEntity) tileEntity)
+                .filter(tileEntity -> tileEntity instanceof IdleStationBlockEntity)
+                .map(tileEntity -> (IdleStationBlockEntity) tileEntity)
                 .collect(Collectors.toList());
     }
 

@@ -18,9 +18,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class SourceStationTileEntity extends AbstractStationTileEntity {
+public class SourceStationBlockEntity extends AbstractStationBlockEntity {
 
-    public SourceStationTileEntity(BlockPos pos, BlockState state) {
+    public SourceStationBlockEntity(BlockPos pos, BlockState state) {
         super(BuzzyDronesTileEntities.SOURCE_STATION.get(), pos, state);
     }
 
@@ -29,7 +29,7 @@ public class SourceStationTileEntity extends AbstractStationTileEntity {
         return new TranslatableComponent("container.buzzydrones.source");
     }
     
-    public static void serverTick(Level level, BlockPos blockPos, BlockState state, SourceStationTileEntity blockEntity) {
+    public static void serverTick(Level level, BlockPos blockPos, BlockState state, SourceStationBlockEntity blockEntity) {
         if(blockEntity.droneEntity == null && !blockEntity.droneNbtFix.isEmpty()) {
             blockEntity.droneEntity = new DroneEntity(level, 0);
             blockEntity.droneEntity.readAdditionalSaveData(blockEntity.droneNbtFix);

@@ -1,6 +1,6 @@
 package hexagon.buzzydrones.common.entity.ai;
 
-import hexagon.buzzydrones.common.blockentity.TargetStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.TargetStationBlockEntity;
 import hexagon.buzzydrones.common.entity.DroneEntity;
 
 import java.util.Comparator;
@@ -31,9 +31,9 @@ public class FindTargetWithFilterGoal extends Goal {
 
     @Override
     public void start() {
-        List<TargetStationTileEntity> list = this.getNearbyTargets();
+        List<TargetStationBlockEntity> list = this.getNearbyTargets();
         if(!list.isEmpty()) {
-            for(TargetStationTileEntity tileEntity : list) {
+            for(TargetStationBlockEntity tileEntity : list) {
                 if(this.targetIsValid(tileEntity)) {
                     this.goTo(tileEntity.getBlockPos());
                     return;
@@ -45,22 +45,22 @@ public class FindTargetWithFilterGoal extends Goal {
         }
     }
 
-    private List<TargetStationTileEntity> getNearbyTargets() {
+    private List<TargetStationBlockEntity> getNearbyTargets() {
         BlockPos dronePos = this.droneEntity.blockPosition();
         return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
                 .map(pos -> this.droneEntity.level.getBlockEntity(pos))
-                .filter(tileEntity -> tileEntity instanceof TargetStationTileEntity)
-                .map(tileEntity -> (TargetStationTileEntity) tileEntity)
+                .filter(tileEntity -> tileEntity instanceof TargetStationBlockEntity)
+                .map(tileEntity -> (TargetStationBlockEntity) tileEntity)
                 .filter(this::filterAllows)
                 .sorted(Comparator.comparingDouble(tileEntity -> tileEntity.getDistance(this.droneEntity.blockPosition())))
                 .collect(Collectors.toList());
     }
 
-    private boolean filterAllows(TargetStationTileEntity tileEntity) {
+    private boolean filterAllows(TargetStationBlockEntity tileEntity) {
         return this.droneEntity.getItemCarried().equals(tileEntity.getFilter());
     }
 
-    private boolean targetIsValid(TargetStationTileEntity tileEntity) {
+    private boolean targetIsValid(TargetStationBlockEntity tileEntity) {
         return tileEntity.isFree() && tileEntity.hasRoomFor(this.droneEntity.getItemCarried());
     }
 

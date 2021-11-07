@@ -1,6 +1,6 @@
 package hexagon.buzzydrones.common.container;
 
-import hexagon.buzzydrones.common.blockentity.TargetStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.TargetStationBlockEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesContainers;
 
 import javax.annotation.Nonnull;
@@ -16,9 +16,9 @@ import net.minecraft.world.item.ItemStack;
 @MethodsReturnNonnullByDefault
 public class TargetStationContainer extends AbstractContainerMenu {
 
-    private final TargetStationTileEntity container;
+    private final TargetStationBlockEntity container;
 
-    public TargetStationContainer(int id, Inventory playerInventory, TargetStationTileEntity container) {
+    public TargetStationContainer(int id, Inventory playerInventory, TargetStationBlockEntity container) {
         super(BuzzyDronesContainers.TARGET_STATION.get(), id);
         this.container = container;
         checkContainerSize(container, 6);
@@ -42,7 +42,7 @@ public class TargetStationContainer extends AbstractContainerMenu {
     }
     
     public TargetStationContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, (TargetStationTileEntity) playerInventory.player.level.getBlockEntity(buffer.readBlockPos()));
+        this(id, playerInventory, (TargetStationBlockEntity) playerInventory.player.level.getBlockEntity(buffer.readBlockPos()));
     }
 
     @Override

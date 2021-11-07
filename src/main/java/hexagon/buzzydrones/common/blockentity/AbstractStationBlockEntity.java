@@ -23,20 +23,19 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public abstract class AbstractStationTileEntity extends RandomizableContainerBlockEntity implements Container {
+public abstract class AbstractStationBlockEntity extends RandomizableContainerBlockEntity implements Container {
 
     protected NonNullList<ItemStack> inventory;
     protected DroneEntity droneEntity;
 
     protected CompoundTag droneNbtFix;
 
-    public AbstractStationTileEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+    public AbstractStationBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(blockEntityType, pos, state);
         this.inventory = NonNullList.withSize(5, ItemStack.EMPTY);
         this.droneEntity = null;

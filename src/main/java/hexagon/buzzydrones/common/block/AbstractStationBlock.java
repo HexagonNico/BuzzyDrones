@@ -1,6 +1,6 @@
 package hexagon.buzzydrones.common.block;
 
-import hexagon.buzzydrones.common.blockentity.AbstractStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.AbstractStationBlockEntity;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -47,7 +47,7 @@ public abstract class AbstractStationBlock extends BaseEntityBlock {
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack item) {
         if(item.hasCustomHoverName()) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
-            if(blockEntity instanceof AbstractStationTileEntity stationBlockEntity) {
+            if(blockEntity instanceof AbstractStationBlockEntity stationBlockEntity) {
                 stationBlockEntity.setCustomName(item.getHoverName());
             }
         }
@@ -87,7 +87,7 @@ public abstract class AbstractStationBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if(!state.is(newState.getBlock())) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
-            if(blockEntity instanceof AbstractStationTileEntity stationBlockEntity) {
+            if(blockEntity instanceof AbstractStationBlockEntity stationBlockEntity) {
                 stationBlockEntity.dropInventory();
             }
             super.onRemove(state, level, pos, newState, isMoving);

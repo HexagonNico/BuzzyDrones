@@ -6,9 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class IdleStationTileEntity extends BlockEntity {
+public class IdleStationBlockEntity extends BlockEntity {
 
-    public IdleStationTileEntity(BlockPos pos, BlockState state) {
+    public IdleStationBlockEntity(BlockPos pos, BlockState state) {
         super(BuzzyDronesTileEntities.IDLE_STATION.get(), pos, state);
     }
 }

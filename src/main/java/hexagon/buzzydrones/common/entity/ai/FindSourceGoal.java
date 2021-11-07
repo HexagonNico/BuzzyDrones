@@ -1,7 +1,7 @@
 package hexagon.buzzydrones.common.entity.ai;
 
-import hexagon.buzzydrones.common.blockentity.AbstractStationTileEntity;
-import hexagon.buzzydrones.common.blockentity.SourceStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.AbstractStationBlockEntity;
+import hexagon.buzzydrones.common.blockentity.SourceStationBlockEntity;
 import hexagon.buzzydrones.common.entity.DroneEntity;
 
 import java.util.Comparator;
@@ -32,9 +32,9 @@ public class FindSourceGoal extends Goal {
 
     @Override
     public void start() {
-        List<SourceStationTileEntity> list = this.getNearbySources();
+        List<SourceStationBlockEntity> list = this.getNearbySources();
         if(!list.isEmpty()) {
-            for(SourceStationTileEntity tileEntity : list) {
+            for(SourceStationBlockEntity tileEntity : list) {
                 if(this.sourceIsValid(tileEntity)) {
                     this.goTo(tileEntity.getBlockPos());
                     return;
@@ -46,17 +46,17 @@ public class FindSourceGoal extends Goal {
         }
     }
 
-    private List<SourceStationTileEntity> getNearbySources() {
+    private List<SourceStationBlockEntity> getNearbySources() {
         BlockPos dronePos = this.droneEntity.blockPosition();
         return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
                 .map(pos -> this.droneEntity.level.getBlockEntity(pos))
-                .filter(tileEntity -> tileEntity instanceof SourceStationTileEntity)
-                .map(tileEntity -> (SourceStationTileEntity) tileEntity)
-                .sorted(Comparator.comparingInt(AbstractStationTileEntity::getFullness).reversed())
+                .filter(tileEntity -> tileEntity instanceof SourceStationBlockEntity)
+                .map(tileEntity -> (SourceStationBlockEntity) tileEntity)
+                .sorted(Comparator.comparingInt(AbstractStationBlockEntity::getFullness).reversed())
                 .collect(Collectors.toList());
     }
 
-    private boolean sourceIsValid(SourceStationTileEntity tileEntity) {
+    private boolean sourceIsValid(SourceStationBlockEntity tileEntity) {
         return tileEntity.isFree() && !tileEntity.isEmpty();
     }
 

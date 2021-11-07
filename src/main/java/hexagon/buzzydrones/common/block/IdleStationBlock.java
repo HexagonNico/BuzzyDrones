@@ -1,6 +1,6 @@
 package hexagon.buzzydrones.common.block;
 
-import hexagon.buzzydrones.common.blockentity.IdleStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.IdleStationBlockEntity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -15,6 +15,6 @@ public class IdleStationBlock extends AbstractStationBlock {
     
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new IdleStationTileEntity(pos, state);
+        return new IdleStationBlockEntity(pos, state);
     }
 }

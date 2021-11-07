@@ -1,7 +1,6 @@
 package hexagon.buzzydrones.common.block;
 
-import hexagon.buzzydrones.common.blockentity.SourceStationTileEntity;
-import hexagon.buzzydrones.common.blockentity.TargetStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.TargetStationBlockEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesTileEntities;
 
 import javax.annotation.Nullable;
@@ -21,12 +20,12 @@ public class TargetStationBlock extends AbstractStationBlock {
     
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TargetStationTileEntity(pos, state);
+        return new TargetStationBlockEntity(pos, state);
     }
     
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, BuzzyDronesTileEntities.TARGET_STATION.get(), TargetStationTileEntity::serverTick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, BuzzyDronesTileEntities.TARGET_STATION.get(), TargetStationBlockEntity::serverTick);
     }
 }

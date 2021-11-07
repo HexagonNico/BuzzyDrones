@@ -29,9 +29,9 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class TargetStationTileEntity extends AbstractStationTileEntity implements WorldlyContainer {
+public class TargetStationBlockEntity extends AbstractStationBlockEntity implements WorldlyContainer {
 
-    public TargetStationTileEntity(BlockPos pos, BlockState state) {
+    public TargetStationBlockEntity(BlockPos pos, BlockState state) {
         super(BuzzyDronesTileEntities.TARGET_STATION.get(), pos, state);
         this.inventory = NonNullList.withSize(6, ItemStack.EMPTY);
     }
@@ -41,7 +41,7 @@ public class TargetStationTileEntity extends AbstractStationTileEntity implement
         return new TranslatableComponent("container.buzzydrones.target");
     }
     
-    public static void serverTick(Level level, BlockPos blockPos, BlockState state, TargetStationTileEntity blockEntity) {
+    public static void serverTick(Level level, BlockPos blockPos, BlockState state, TargetStationBlockEntity blockEntity) {
         if(blockEntity.droneEntity == null && !blockEntity.droneNbtFix.isEmpty()) {
             blockEntity.droneEntity = new DroneEntity(level, 0);
             blockEntity.droneEntity.readAdditionalSaveData(blockEntity.droneNbtFix);
