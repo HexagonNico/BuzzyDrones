@@ -1,32 +1,31 @@
 package hexagon.buzzydrones.common.container;
 
-import hexagon.buzzydrones.common.tileentity.SourceStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.SourceStationTileEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesContainers;
 
 import javax.annotation.Nonnull;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 @MethodsReturnNonnullByDefault
-public class SourceStationContainer extends Container {
-
-    private final IInventory inventory;
-
-    public SourceStationContainer(int id, PlayerInventory playerInventory, IInventory containerInventory) {
+public class SourceStationContainer extends AbstractContainerMenu {
+    
+    private final SourceStationTileEntity container;
+    
+    public SourceStationContainer(int id, Inventory playerInventory, SourceStationTileEntity container) {
         super(BuzzyDronesContainers.SOURCE_STATION.get(), id);
-        this.inventory = containerInventory;
-        checkContainerSize(inventory, 5);
-        inventory.startOpen(playerInventory.player);
+        this.container = container;
+        checkContainerSize(container, 5);
+        container.startOpen(playerInventory.player);
 
         for(int i = 0; i < 5; i++) {
-            this.addSlot(new Slot(containerInventory, i, 44 + i * 18, 20));
+            this.addSlot(new Slot(container, i, 44 + i * 18, 20));
         }
 
         for(int i = 0; i < 3; i++) {
@@ -40,31 +39,31 @@ public class SourceStationContainer extends Container {
         }
     }
     
-    public SourceStationContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer) {
-        this(windowId, playerInventory, (SourceStationTileEntity) playerInventory.player.level.getBlockEntity(buffer.readBlockPos()));
+    public SourceStationContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
+        this(id, playerInventory, (SourceStationTileEntity) playerInventory.player.level.getBlockEntity(buffer.readBlockPos()));
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
-        return this.inventory.stillValid(player);
+    public boolean stillValid(@Nonnull Player player) {
+        return this.container.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if(slot.hasItem()) {
             ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
-            if (index < this.inventory.getContainerSize()) {
-                if (!this.moveItemStackTo(itemStack1, this.inventory.getContainerSize(), this.slots.size(), true)) {
+            if(index < this.container.getContainerSize()) {
+                if (!this.moveItemStackTo(itemStack1, this.container.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemStack1, 0, this.inventory.getContainerSize(), false)) {
+            } else if(!this.moveItemStackTo(itemStack1, 0, this.container.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (itemStack1.isEmpty()) {
+            if(itemStack1.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
@@ -75,8 +74,8 @@ public class SourceStationContainer extends Container {
     }
 
     @Override
-    public void removed(@Nonnull PlayerEntity player) {
+    public void removed(@Nonnull Player player) {
         super.removed(player);
-        this.inventory.stopOpen(player);
+        this.container.stopOpen(player);
     }
 }

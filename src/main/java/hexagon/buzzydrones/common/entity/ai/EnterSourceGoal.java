@@ -1,11 +1,11 @@
 package hexagon.buzzydrones.common.entity.ai;
 
+import hexagon.buzzydrones.common.blockentity.SourceStationTileEntity;
 import hexagon.buzzydrones.common.entity.DroneEntity;
-import hexagon.buzzydrones.common.tileentity.SourceStationTileEntity;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class EnterSourceGoal extends Goal {
 
@@ -28,11 +28,11 @@ public class EnterSourceGoal extends Goal {
     @Override
     public void start() {
         BlockPos pos = this.droneEntity.getNavigation().getTargetPos();
-        TileEntity sourceTileEntity = this.droneEntity.level.getBlockEntity(pos);
-        if(sourceTileEntity instanceof SourceStationTileEntity) {
+        BlockEntity blockEntity = this.droneEntity.level.getBlockEntity(pos);
+        if(blockEntity instanceof SourceStationTileEntity sourceStationBlockEntity) {
             if(this.sourceIsWithinDistance(pos)) {
                 this.droneEntity.getNavigation().stop();
-                ((SourceStationTileEntity) sourceTileEntity).droneEnter(this.droneEntity);
+                sourceStationBlockEntity.droneEnter(this.droneEntity);
             }
         }
     }

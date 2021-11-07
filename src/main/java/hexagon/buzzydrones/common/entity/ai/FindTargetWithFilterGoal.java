@@ -1,15 +1,15 @@
 package hexagon.buzzydrones.common.entity.ai;
 
+import hexagon.buzzydrones.common.blockentity.TargetStationTileEntity;
 import hexagon.buzzydrones.common.entity.DroneEntity;
-import hexagon.buzzydrones.common.tileentity.TargetStationTileEntity;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 
 public class FindTargetWithFilterGoal extends Goal {
 
@@ -65,8 +65,8 @@ public class FindTargetWithFilterGoal extends Goal {
     }
 
     private void goTo(BlockPos pos) {
-        PathNavigator navigator = this.droneEntity.getNavigation();
-        navigator.moveTo(navigator.createPath(pos, 1), 1.0);
+        PathNavigation navigation = this.droneEntity.getNavigation();
+        navigation.moveTo(navigation.createPath(pos, 1), 1.0);
         this.droneEntity.setStatus(DroneEntity.Status.WORKING);
     }
 }

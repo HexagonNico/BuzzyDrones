@@ -29,11 +29,10 @@ public class BuzzyDrones {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        BuzzyDronesEntities.registerAttributes();
+    
     }
 
     private void clientStuff(final FMLClientSetupEvent event) {
         BuzzyDronesContainers.registerGuis();
-        BuzzyDronesEntities.registerRenders();
     }
 }

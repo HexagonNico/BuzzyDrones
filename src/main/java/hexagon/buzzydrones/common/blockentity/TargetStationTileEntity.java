@@ -1,22 +1,26 @@
-package hexagon.buzzydrones.common.tileentity;
+package hexagon.buzzydrones.common.blockentity;
 
 import hexagon.buzzydrones.common.container.TargetStationContainer;
+import hexagon.buzzydrones.common.entity.DroneEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesTileEntities;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -25,36 +29,38 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class TargetStationTileEntity extends AbstractStationTileEntity implements ISidedInventory {
+public class TargetStationTileEntity extends AbstractStationTileEntity implements WorldlyContainer {
 
-    public TargetStationTileEntity() {
-        super(BuzzyDronesTileEntities.TARGET_STATION.get());
+    public TargetStationTileEntity(BlockPos pos, BlockState state) {
+        super(BuzzyDronesTileEntities.TARGET_STATION.get(), pos, state);
         this.inventory = NonNullList.withSize(6, ItemStack.EMPTY);
     }
 
     @Override
-    public ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.buzzydrones.target");
+    public Component getDefaultName() {
+        return new TranslatableComponent("container.buzzydrones.target");
     }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if(this.droneEntity != null && this.level != null && !this.level.isClientSide()) {
+    
+    public static void serverTick(Level level, BlockPos blockPos, BlockState state, TargetStationTileEntity blockEntity) {
+        if(blockEntity.droneEntity == null && !blockEntity.droneNbtFix.isEmpty()) {
+            blockEntity.droneEntity = new DroneEntity(level, 0);
+            blockEntity.droneEntity.readAdditionalSaveData(blockEntity.droneNbtFix);
+        }
+        if(blockEntity.droneEntity != null && !level.isClientSide) {
             for(int i = 0; i < 5; i++) {
-                ItemStack itemStack = this.inventory.get(i);
+                ItemStack itemStack = blockEntity.inventory.get(i);
                 if(itemStack.isEmpty()) {
-                    this.inventory.set(i, new ItemStack(this.droneEntity.getItemCarried(), 1));
-                    this.droneEntity.decreaseItemCarriedCount();
+                    blockEntity.inventory.set(i, new ItemStack(blockEntity.droneEntity.getItemCarried(), 1));
+                    blockEntity.droneEntity.decreaseItemCarriedCount();
                     break;
-                } else if(itemStack.getItem().equals(this.droneEntity.getItemCarried()) && itemStack.getCount() < itemStack.getItem().getItemStackLimit(itemStack)) {
+                } else if(itemStack.getItem().equals(blockEntity.droneEntity.getItemCarried()) && itemStack.getCount() < itemStack.getItem().getItemStackLimit(itemStack)) {
                     itemStack.setCount(itemStack.getCount() + 1);
-                    this.droneEntity.decreaseItemCarriedCount();
+                    blockEntity.droneEntity.decreaseItemCarriedCount();
                     break;
                 }
             }
-            if(!this.droneEntity.isCarryingItems() || !this.hasRoomFor(this.droneEntity.getItemCarried()))
-                this.droneExit();
+            if(!blockEntity.droneEntity.isCarryingItems() || !blockEntity.hasRoomFor(blockEntity.droneEntity.getItemCarried()))
+                blockEntity.droneExit();
         }
     }
 
@@ -76,8 +82,8 @@ public class TargetStationTileEntity extends AbstractStationTileEntity implement
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return new TargetStationContainer(id, player, this);
+    protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
+        return new TargetStationContainer(id, playerInventory, this);
     }
 
     @Override

@@ -1,15 +1,20 @@
 package hexagon.buzzydrones.common.block;
 
-import hexagon.buzzydrones.common.tileentity.IdleStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.IdleStationTileEntity;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.tileentity.TileEntity;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 @MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class IdleStationBlock extends AbstractStationBlock {
-
+    
     @Override
-    protected TileEntity getTileEntity() {
-        return new IdleStationTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new IdleStationTileEntity(pos, state);
     }
 }

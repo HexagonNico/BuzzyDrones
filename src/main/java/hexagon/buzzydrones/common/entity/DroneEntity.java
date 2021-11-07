@@ -7,44 +7,45 @@ import hexagon.buzzydrones.utils.NbtHelper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import com.mojang.math.Vector3f;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class DroneEntity extends CreatureEntity {
+public class DroneEntity extends PathfinderMob {
 
-    private static final DataParameter<Integer> STATUS = EntityDataManager.defineId(DroneEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> STATUS = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.INT);
 
-    private static final IParticleData BLUE_PARTICLES = new RedstoneParticleData(0.0f, 0.84f, 0.89f, 1.0f);
-    private static final IParticleData GREEN_PARTICLES = new RedstoneParticleData(0.0f, 0.89f, 0.35f, 1.0f);
-    private static final IParticleData ORANGE_PARTICLES = new RedstoneParticleData(0.89f, 0.35f, 0.0f, 1.0f);
-    private static final IParticleData RED_PARTICLES = new RedstoneParticleData(0.89f, 0.0f, 0.09f, 1.0f);
+    private static final ParticleOptions BLUE_PARTICLES = new DustParticleOptions(new Vector3f(0.0f, 0.84f, 0.89f), 1.0f);
+    private static final ParticleOptions GREEN_PARTICLES = new DustParticleOptions(new Vector3f(0.0f, 0.89f, 0.35f), 1.0f);
+    private static final ParticleOptions ORANGE_PARTICLES = new DustParticleOptions(new Vector3f(0.89f, 0.35f, 0.0f), 1.0f);
+    private static final ParticleOptions RED_PARTICLES = new DustParticleOptions(new Vector3f(0.89f, 0.0f, 0.09f), 1.0f);
 
     public static final int BASIC = 1;
     public static final int PICK_UP = 2;
@@ -52,19 +53,19 @@ public class DroneEntity extends CreatureEntity {
     private ItemStack carrying = ItemStack.EMPTY;
     private int type;
 
-    public DroneEntity(EntityType<? extends CreatureEntity> type, World world) {
-        super(type, world);
-        super.moveControl = new FlyingMovementController(this, 20, true);
+    public DroneEntity(EntityType<? extends PathfinderMob> type, Level level) {
+        super(type, level);
+        super.moveControl = new FlyingMoveControl(this, 20, true);
         //this.lookController = new BeeEntity.BeeLookController(this);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
-        this.setPathfindingMalus(PathNodeType.WATER_BORDER, 16.0F);
-        this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
-        this.setPathfindingMalus(PathNodeType.FENCE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16.0F);
+        this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
     }
 
-    public DroneEntity(World world, int type) {
-        this(BuzzyDronesEntities.DRONE.get(), world);
+    public DroneEntity(Level level, int type) {
+        this(BuzzyDronesEntities.DRONE.get(), level);
         this.type = type;
         this.registerGoals();
     }
@@ -121,7 +122,7 @@ public class DroneEntity extends CreatureEntity {
     public void pickUpAllItems(ItemStack itemStack) {
         if(!itemStack.isEmpty() && this.carrying.isEmpty()) {
             this.carrying = new ItemStack(itemStack.getItem(), itemStack.getCount());
-            this.level.playSound(null, this.position().x(), this.position().y(), this.position().z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            this.level.playSound(null, this.position().x(), this.position().y(), this.position().z(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1.0F, 1.0F);
             itemStack.setCount(0);
         }
     }
@@ -166,31 +167,31 @@ public class DroneEntity extends CreatureEntity {
         }
     }
 
-    public void dropItemCarried(Vector3d pos) {
+    public void dropItemCarried(Vec3 pos) {
         if(!this.carrying.isEmpty() && !this.level.isClientSide) {
-            this.level.addFreshEntity(new ItemEntity(this.level, pos.x(), pos.y(), pos.z(), this.carrying));
+            this.level.addFreshEntity(new ItemEntity(this.level, pos.x, pos.y, pos.z, this.carrying));
         }
     }
 
     public void dropItemCarried(BlockPos pos) {
-        this.dropItemCarried(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
+        this.dropItemCarried(new Vec3(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         this.writeInterestingData(compound);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.carrying = NbtHelper.loadSingleItem(compound, "Carrying");
         this.type = compound.getInt("DroneType");
         this.registerGoals();
     }
 
-    public void writeInterestingData(CompoundNBT compound) {
+    public void writeInterestingData(CompoundTag compound) {
         NbtHelper.saveSingleItem(compound, this.carrying, "Carrying");
         compound.putInt("DroneType", this.type);
     }
@@ -206,37 +207,32 @@ public class DroneEntity extends CreatureEntity {
     }
     
     @Override
-    public boolean causeFallDamage(float f1, float f2) {
+    public boolean causeFallDamage(float f1, float f2, DamageSource source) {
         return false;
     }
     
     @Override
-    protected PathNavigator createNavigation(World worldIn) {
-        FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn);
-        flyingpathnavigator.setCanOpenDoors(false);
-        flyingpathnavigator.setCanFloat(false);
-        flyingpathnavigator.setCanOpenDoors(true);
-        return flyingpathnavigator;
+    protected PathNavigation createNavigation(Level level) {
+        FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, level);
+        flyingpathnavigation.setCanOpenDoors(false);
+        flyingpathnavigation.setCanFloat(false);
+        flyingpathnavigation.setCanOpenDoors(true);
+        return flyingpathnavigation;
     }
 
-    public static AttributeModifierMap.MutableAttribute setAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder setAttributes() {
+        return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 3.0)
                 .add(Attributes.FLYING_SPEED, 0.8);
     }
 
-    private IParticleData getParticles() {
-        switch(this.getStatus()) {
-            case WORKING:
-                return BLUE_PARTICLES;
-            case IDLE:
-                return GREEN_PARTICLES;
-            case WARNING:
-                return ORANGE_PARTICLES;
-            case ERROR:
-            default:
-                return RED_PARTICLES;
-        }
+    private ParticleOptions getParticles() {
+        return switch (this.getStatus()) {
+            case WORKING -> BLUE_PARTICLES;
+            case IDLE -> GREEN_PARTICLES;
+            case WARNING -> ORANGE_PARTICLES;
+            default -> RED_PARTICLES;
+        };
     }
 
     public enum Status {

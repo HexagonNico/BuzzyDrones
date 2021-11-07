@@ -1,19 +1,19 @@
 package hexagon.buzzydrones.utils;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 public class NbtHelper {
 
-    public static void saveSingleItem(CompoundNBT nbt, ItemStack itemStack, String key) {
-        CompoundNBT itemNbt = new CompoundNBT();
+    public static void saveSingleItem(CompoundTag nbt, ItemStack itemStack, String key) {
+        CompoundTag itemNbt = new CompoundTag();
         if(!itemStack.isEmpty()) itemStack.save(itemNbt);
         itemStack.save(itemNbt);
         nbt.put(key, itemNbt);
     }
 
-    public static ItemStack loadSingleItem(CompoundNBT nbt, String key) {
-        CompoundNBT itemNbt = nbt.getCompound(key);
+    public static ItemStack loadSingleItem(CompoundTag nbt, String key) {
+        CompoundTag itemNbt = nbt.getCompound(key);
         ItemStack itemStack = ItemStack.EMPTY;
         if(!itemNbt.isEmpty()) itemStack = ItemStack.of(itemNbt);
         return itemStack;

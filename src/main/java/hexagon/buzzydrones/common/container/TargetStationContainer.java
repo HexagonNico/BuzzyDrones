@@ -1,35 +1,34 @@
 package hexagon.buzzydrones.common.container;
 
-import hexagon.buzzydrones.common.tileentity.TargetStationTileEntity;
+import hexagon.buzzydrones.common.blockentity.TargetStationTileEntity;
 import hexagon.buzzydrones.core.registry.BuzzyDronesContainers;
 
 import javax.annotation.Nonnull;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 @MethodsReturnNonnullByDefault
-public class TargetStationContainer extends Container {
+public class TargetStationContainer extends AbstractContainerMenu {
 
-    private final IInventory inventory;
+    private final TargetStationTileEntity container;
 
-    public TargetStationContainer(int id, PlayerInventory playerInventory, IInventory containerInventory) {
+    public TargetStationContainer(int id, Inventory playerInventory, TargetStationTileEntity container) {
         super(BuzzyDronesContainers.TARGET_STATION.get(), id);
-        this.inventory = containerInventory;
-        checkContainerSize(containerInventory, 6);
-        containerInventory.startOpen(playerInventory.player);
+        this.container = container;
+        checkContainerSize(container, 6);
+        container.startOpen(playerInventory.player);
 
         for(int i = 0; i < 5; i++) {
-            this.addSlot(new Slot(containerInventory, i, 26 + i * 18, 20));
+            this.addSlot(new Slot(container, i, 26 + i * 18, 20));
         }
 
-        this.addSlot(new Slot(containerInventory, 5, 26 + 6 * 18, 20));
+        this.addSlot(new Slot(container, 5, 26 + 6 * 18, 20));
 
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 9; j++) {
@@ -42,27 +41,27 @@ public class TargetStationContainer extends Container {
         }
     }
     
-    public TargetStationContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer) {
-        this(windowId, playerInventory, (TargetStationTileEntity) playerInventory.player.level.getBlockEntity(buffer.readBlockPos()));
+    public TargetStationContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
+        this(id, playerInventory, (TargetStationTileEntity) playerInventory.player.level.getBlockEntity(buffer.readBlockPos()));
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
-        return this.inventory.stillValid(player);
+    public boolean stillValid(@Nonnull Player player) {
+        return this.container.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if(slot.hasItem()) {
             ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
-            if (index < this.inventory.getContainerSize()) {
-                if (!this.moveItemStackTo(itemStack1, this.inventory.getContainerSize(), this.slots.size(), true)) {
+            if (index < this.container.getContainerSize()) {
+                if (!this.moveItemStackTo(itemStack1, this.container.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemStack1, 0, this.inventory.getContainerSize(), false)) {
+            } else if (!this.moveItemStackTo(itemStack1, 0, this.container.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -77,8 +76,8 @@ public class TargetStationContainer extends Container {
     }
 
     @Override
-    public void removed(@Nonnull PlayerEntity playerIn) {
-        super.removed(playerIn);
-        this.inventory.stopOpen(playerIn);
+    public void removed(@Nonnull Player player) {
+        super.removed(player);
+        this.container.stopOpen(player);
     }
 }

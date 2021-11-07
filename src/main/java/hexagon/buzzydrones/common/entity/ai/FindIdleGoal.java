@@ -1,15 +1,15 @@
 package hexagon.buzzydrones.common.entity.ai;
 
+import hexagon.buzzydrones.common.blockentity.IdleStationTileEntity;
 import hexagon.buzzydrones.common.entity.DroneEntity;
-import hexagon.buzzydrones.common.tileentity.IdleStationTileEntity;
 
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 
 public class FindIdleGoal extends Goal {
 
@@ -49,10 +49,10 @@ public class FindIdleGoal extends Goal {
     }
 
     private void wanderAround(BlockPos pos) {
-        PathNavigator navigator = this.droneEntity.getNavigation();
+        PathNavigation navigation = this.droneEntity.getNavigation();
         float xOffset = this.random.nextInt((3 - -3) + 1) + -3;
         float yOffset = this.random.nextInt(3) + 1;
         float zOffset = this.random.nextInt((3 - -3) + 1) + -3;
-        navigator.moveTo(navigator.createPath(pos.offset(xOffset, yOffset, zOffset), 1), 1.0);
+        navigation.moveTo(navigation.createPath(pos.offset(xOffset, yOffset, zOffset), 1), 1.0);
     }
 }

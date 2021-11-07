@@ -6,9 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
 
 public class FindItemsGoal extends Goal {
 
@@ -52,7 +52,7 @@ public class FindItemsGoal extends Goal {
     }
 
     private List<ItemEntity> getNearbyItems(double r) {
-        AxisAlignedBB box = this.droneEntity.getBoundingBox().inflate(r);
+        AABB box = this.droneEntity.getBoundingBox().inflate(r);
         return this.droneEntity.level.getEntitiesOfClass(ItemEntity.class, box)
                 .stream().sorted(Comparator.comparingDouble((item) -> item.blockPosition().distSqr(this.droneEntity.blockPosition()))).collect(Collectors.toList());
     }
