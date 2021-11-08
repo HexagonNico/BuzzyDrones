@@ -13,7 +13,7 @@ Drones are not more efficient than conveyor belts or item pipes, they are just a
 * [CurseForge page](https://www.curseforge.com/minecraft/mc-mods/buzzy-drones)
 * [Wiki](https://github.com/HexagonNico/BuzzyDrones/wiki)
 
-## Licence
+## License
 
 Copyright (c) 2021 HexagonNico.
 
