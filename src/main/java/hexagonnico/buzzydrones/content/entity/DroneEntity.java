@@ -33,7 +33,6 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -58,7 +57,6 @@ public class DroneEntity extends PathfinderMob {
 	public DroneEntity(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 		super.moveControl = new FlyingMoveControl(this, 20, true);
-		//this.lookController = new BeeEntity.BeeLookController(this);
 		this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
 		this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
 		this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16.0F);
@@ -129,8 +127,12 @@ public class DroneEntity extends PathfinderMob {
 		}
 	}
 
-	public Item getItemCarried() {
-		return this.carrying.getItem();
+	public ItemStack getItemCarried() {
+		return this.carrying;
+	}
+
+	public void setItemCarried(ItemStack itemStack) {
+		this.carrying = itemStack;
 	}
 
 	public void decreaseItemCarriedCount() {

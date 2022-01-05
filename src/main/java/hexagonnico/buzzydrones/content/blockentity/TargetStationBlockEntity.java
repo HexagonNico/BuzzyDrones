@@ -1,7 +1,6 @@
 package hexagonnico.buzzydrones.content.blockentity;
 
 import hexagonnico.buzzydrones.content.container.TargetStationContainer;
-import hexagonnico.buzzydrones.content.entity.DroneEntity;
 import hexagonnico.buzzydrones.registry.BuzzyDronesBlockEntities;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -36,40 +35,36 @@ public class TargetStationBlockEntity extends AbstractStationBlockEntity impleme
 	}
 
 	public static void serverTick(Level level, BlockPos blockPos, BlockState state, TargetStationBlockEntity blockEntity) {
-		if(blockEntity.droneEntity == null && !blockEntity.droneNbtFix.isEmpty()) {
-			blockEntity.droneEntity = new DroneEntity(level, 0);
-			blockEntity.droneEntity.readAdditionalSaveData(blockEntity.droneNbtFix);
-		}
-		if(blockEntity.droneEntity != null && !level.isClientSide) {
+		if(blockEntity.droneInStation != null && !level.isClientSide) {
 			for(int i = 0; i < 5; i++) {
 				ItemStack itemStack = blockEntity.inventory.get(i);
 				if(itemStack.isEmpty()) {
-					blockEntity.inventory.set(i, new ItemStack(blockEntity.droneEntity.getItemCarried(), 1));
-					blockEntity.droneEntity.decreaseItemCarriedCount();
+					blockEntity.inventory.set(i, new ItemStack(blockEntity.droneInStation.itemCarried.getItem(), 1));
+					blockEntity.droneInStation.itemCarried.shrink(1);
 					break;
-				} else if(itemStack.getItem().equals(blockEntity.droneEntity.getItemCarried()) && itemStack.getCount() < itemStack.getItem().getItemStackLimit(itemStack)) {
-					itemStack.setCount(itemStack.getCount() + 1);
-					blockEntity.droneEntity.decreaseItemCarriedCount();
+				} else if(itemStack.sameItem(blockEntity.droneInStation.itemCarried) && itemStack.getCount() < itemStack.getMaxStackSize()) {
+					itemStack.grow(1);
+					blockEntity.droneInStation.itemCarried.shrink(1);
 					break;
 				}
 			}
-			if(!blockEntity.droneEntity.isCarryingItems() || !blockEntity.hasRoomFor(blockEntity.droneEntity.getItemCarried()))
+			if(blockEntity.droneInStation.itemCarried.isEmpty() || !blockEntity.hasRoomFor(blockEntity.droneInStation.itemCarried))
 				blockEntity.droneExit();
 		}
 	}
 
-	public Item getFilter() {
-		return this.inventory.get(5).getItem();
+	public ItemStack getFilter() {
+		return this.inventory.get(5);
 	}
 
 	public boolean hasFilter() {
 		return !this.inventory.get(5).isEmpty();
 	}
 
-	public boolean hasRoomFor(Item item) {
+	public boolean hasRoomFor(ItemStack item) {
 		for(int i = 0; i < 5; i++) {
 			ItemStack inventoryItem = this.inventory.get(i);
-			if(inventoryItem.isEmpty() || (inventoryItem.getCount() < 64 && inventoryItem.getItem().equals(item)))
+			if(inventoryItem.isEmpty() || (inventoryItem.getCount() < inventoryItem.getMaxStackSize() && inventoryItem.sameItem(item)))
 				return true;
 		}
 		return false;

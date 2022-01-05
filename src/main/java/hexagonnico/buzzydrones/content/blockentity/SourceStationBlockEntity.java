@@ -1,7 +1,6 @@
 package hexagonnico.buzzydrones.content.blockentity;
 
 import hexagonnico.buzzydrones.content.container.SourceStationContainer;
-import hexagonnico.buzzydrones.content.entity.DroneEntity;
 import hexagonnico.buzzydrones.registry.BuzzyDronesBlockEntities;
 
 import net.minecraft.core.BlockPos;
@@ -25,23 +24,28 @@ public class SourceStationBlockEntity extends AbstractStationBlockEntity {
 	}
 
 	public static void serverTick(Level level, BlockPos blockPos, BlockState state, SourceStationBlockEntity blockEntity) {
-		if(blockEntity.droneEntity == null && !blockEntity.droneNbtFix.isEmpty()) {
-			blockEntity.droneEntity = new DroneEntity(level, 0);
-			blockEntity.droneEntity.readAdditionalSaveData(blockEntity.droneNbtFix);
-		}
-		if(blockEntity.droneEntity != null) {
+		if(blockEntity.droneInStation != null) {
 			for(ItemStack itemStack : blockEntity.inventory) {
-				if(blockEntity.droneEntity.pickUpItems(itemStack))
-					break;
+				if(!itemStack.isEmpty() && blockEntity.droneInStation.itemCarried.getCount() < 64) {
+					if(blockEntity.droneInStation.itemCarried.isEmpty()) {
+						blockEntity.droneInStation.itemCarried = new ItemStack(itemStack.getItem(), 1);
+						itemStack.shrink(1);
+						break;
+					} else if(blockEntity.droneInStation.itemCarried.sameItem(itemStack)) {
+						blockEntity.droneInStation.itemCarried.grow(1);
+						itemStack.shrink(1);
+						break;
+					}
+				}
 			}
 			if(blockEntity.droneCanExit()) blockEntity.droneExit();
 		}
 	}
 
 	private boolean droneCanExit() {
-		if(!this.droneEntity.isFull()) {
+		if(this.droneInStation.itemCarried.getCount() < this.droneInStation.itemCarried.getMaxStackSize()) {
 			for(ItemStack itemStack : this.inventory) {
-				if(itemStack.getItem().equals(this.droneEntity.getItemCarried()))
+				if(itemStack.sameItem(this.droneInStation.itemCarried))
 					return false;
 			}
 		}

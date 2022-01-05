@@ -33,9 +33,9 @@ public class FindTargetWithFilterGoal extends Goal {
 	public void start() {
 		List<TargetStationBlockEntity> list = this.getNearbyTargets();
 		if(!list.isEmpty()) {
-			for(TargetStationBlockEntity tileEntity : list) {
-				if(this.targetIsValid(tileEntity)) {
-					this.goTo(tileEntity.getBlockPos());
+			for(TargetStationBlockEntity blockEntity : list) {
+				if(this.targetIsValid(blockEntity)) {
+					this.goTo(blockEntity.getBlockPos());
 					return;
 				}
 			}
@@ -49,19 +49,19 @@ public class FindTargetWithFilterGoal extends Goal {
 		BlockPos dronePos = this.droneEntity.blockPosition();
 		return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
 				.map(pos -> this.droneEntity.level.getBlockEntity(pos))
-				.filter(tileEntity -> tileEntity instanceof TargetStationBlockEntity)
-				.map(tileEntity -> (TargetStationBlockEntity) tileEntity)
+				.filter(blockEntity -> blockEntity instanceof TargetStationBlockEntity)
+				.map(blockEntity -> (TargetStationBlockEntity) blockEntity)
 				.filter(this::filterAllows)
-				.sorted(Comparator.comparingDouble(tileEntity -> tileEntity.getDistance(this.droneEntity.blockPosition())))
+				.sorted(Comparator.comparingDouble(blockEntity -> blockEntity.getDistance(this.droneEntity.blockPosition())))
 				.collect(Collectors.toList());
 	}
 
-	private boolean filterAllows(TargetStationBlockEntity tileEntity) {
-		return this.droneEntity.getItemCarried().equals(tileEntity.getFilter());
+	private boolean filterAllows(TargetStationBlockEntity blockEntity) {
+		return this.droneEntity.getItemCarried().sameItem(blockEntity.getFilter());
 	}
 
-	private boolean targetIsValid(TargetStationBlockEntity tileEntity) {
-		return tileEntity.isFree() && tileEntity.hasRoomFor(this.droneEntity.getItemCarried());
+	private boolean targetIsValid(TargetStationBlockEntity blockEntity) {
+		return blockEntity.isFree() && blockEntity.hasRoomFor(this.droneEntity.getItemCarried());
 	}
 
 	private void goTo(BlockPos pos) {
