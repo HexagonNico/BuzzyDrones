@@ -5,7 +5,6 @@ import hexagonnico.buzzydrones.content.entity.DroneEntity;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -33,9 +32,9 @@ public class FindTargetGoal extends Goal {
 	public void start() {
 		List<TargetStationBlockEntity> list = this.getNearbyTargets();
 		if(!list.isEmpty()) {
-			for(TargetStationBlockEntity tileEntity : list) {
-				if(this.targetIsValid(tileEntity)) {
-					this.goTo(tileEntity.getBlockPos());
+			for(TargetStationBlockEntity blockEntity : list) {
+				if(this.targetIsValid(blockEntity)) {
+					this.goTo(blockEntity.getBlockPos());
 					return;
 				}
 			}
@@ -48,15 +47,15 @@ public class FindTargetGoal extends Goal {
 	private List<TargetStationBlockEntity> getNearbyTargets() {
 		BlockPos dronePos = this.droneEntity.blockPosition();
 		return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
-				.map(pos -> this.droneEntity.level.getBlockEntity(pos))
-				.filter(tileEntity -> tileEntity instanceof TargetStationBlockEntity)
-				.map(tileEntity -> (TargetStationBlockEntity) tileEntity)
-				.sorted(Comparator.comparingDouble(tileEntity -> tileEntity.getDistance(this.droneEntity.blockPosition())))
-				.collect(Collectors.toList());
+				.map(this.droneEntity.level::getBlockEntity)
+				.filter(TargetStationBlockEntity.class::isInstance)
+				.map(TargetStationBlockEntity.class::cast)
+				.sorted(Comparator.comparingDouble(blockEntity -> blockEntity.getDistance(this.droneEntity.blockPosition())))
+				.toList();
 	}
 
-	private boolean targetIsValid(TargetStationBlockEntity tileEntity) {
-		return tileEntity.isFree() && !tileEntity.hasFilter() && tileEntity.hasRoomFor(this.droneEntity.getItemCarried());
+	private boolean targetIsValid(TargetStationBlockEntity blockEntity) {
+		return blockEntity.isFree() && !blockEntity.hasFilter() && blockEntity.hasRoomFor(this.droneEntity.getItemCarried());
 	}
 
 	private void goTo(BlockPos pos) {

@@ -3,9 +3,8 @@ package hexagonnico.buzzydrones.content.entity.ai;
 import hexagonnico.buzzydrones.content.blockentity.IdleStationBlockEntity;
 import hexagonnico.buzzydrones.content.entity.DroneEntity;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -33,19 +32,16 @@ public class FindIdleGoal extends Goal {
 
 	@Override
 	public void start() {
-		List<IdleStationBlockEntity> list = this.getNearbyStations();
-		if(!list.isEmpty()) {
-			this.wanderAround(list.get(0).getBlockPos());
-		}
+		this.getClosestStation().ifPresent(station -> this.wanderAround(station.getBlockPos()));
 	}
 
-	private List<IdleStationBlockEntity> getNearbyStations() {
+	private Optional<IdleStationBlockEntity> getClosestStation() {
 		BlockPos dronePos = this.droneEntity.blockPosition();
 		return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
-				.map(pos -> this.droneEntity.level.getBlockEntity(pos))
-				.filter(tileEntity -> tileEntity instanceof IdleStationBlockEntity)
-				.map(tileEntity -> (IdleStationBlockEntity) tileEntity)
-				.collect(Collectors.toList());
+				.map(this.droneEntity.level::getBlockEntity)
+				.filter(IdleStationBlockEntity.class::isInstance)
+				.map(IdleStationBlockEntity.class::cast)
+				.findFirst();
 	}
 
 	private void wanderAround(BlockPos pos) {

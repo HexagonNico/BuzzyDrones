@@ -6,7 +6,6 @@ import hexagonnico.buzzydrones.content.entity.DroneEntity;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -34,9 +33,9 @@ public class FindSourceGoal extends Goal {
 	public void start() {
 		List<SourceStationBlockEntity> list = this.getNearbySources();
 		if(!list.isEmpty()) {
-			for(SourceStationBlockEntity tileEntity : list) {
-				if(this.sourceIsValid(tileEntity)) {
-					this.goTo(tileEntity.getBlockPos());
+			for(SourceStationBlockEntity blockEntity : list) {
+				if(this.sourceIsValid(blockEntity)) {
+					this.goTo(blockEntity.getBlockPos());
 					return;
 				}
 			}
@@ -49,15 +48,15 @@ public class FindSourceGoal extends Goal {
 	private List<SourceStationBlockEntity> getNearbySources() {
 		BlockPos dronePos = this.droneEntity.blockPosition();
 		return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
-				.map(pos -> this.droneEntity.level.getBlockEntity(pos))
-				.filter(tileEntity -> tileEntity instanceof SourceStationBlockEntity)
-				.map(tileEntity -> (SourceStationBlockEntity) tileEntity)
+				.map(this.droneEntity.level::getBlockEntity)
+				.filter(SourceStationBlockEntity.class::isInstance)
+				.map(SourceStationBlockEntity.class::cast)
 				.sorted(Comparator.comparingInt(AbstractStationBlockEntity::getFullness).reversed())
-				.collect(Collectors.toList());
+				.toList();
 	}
 
-	private boolean sourceIsValid(SourceStationBlockEntity tileEntity) {
-		return tileEntity.isFree() && !tileEntity.isEmpty();
+	private boolean sourceIsValid(SourceStationBlockEntity blockEntity) {
+		return blockEntity.isFree() && !blockEntity.isEmpty();
 	}
 
 	private void goTo(BlockPos pos) {
