@@ -108,7 +108,8 @@ public abstract class AbstractStationBlockEntity extends RandomizableContainerBl
 	@Override
 	public void load(CompoundTag nbt) {
 		super.load(nbt);
-		this.droneInStation = new DroneData(nbt.getCompound("Drone"), NbtHelper.loadSingleItem(nbt, "DroneItem"));
+		if(nbt.contains("Drone"))
+			this.droneInStation = new DroneData(nbt.getCompound("Drone"), NbtHelper.loadSingleItem(nbt, "DroneItem"));
 		this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(nbt, this.inventory);
 	}

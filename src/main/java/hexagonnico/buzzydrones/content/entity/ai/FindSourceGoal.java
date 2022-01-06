@@ -6,6 +6,7 @@ import hexagonnico.buzzydrones.content.entity.DroneEntity;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -47,12 +48,12 @@ public class FindSourceGoal extends Goal {
 
 	private List<SourceStationBlockEntity> getNearbySources() {
 		BlockPos dronePos = this.droneEntity.blockPosition();
-		return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
-				.map(this.droneEntity.level::getBlockEntity)
-				.filter(SourceStationBlockEntity.class::isInstance)
-				.map(SourceStationBlockEntity.class::cast)
-				.sorted(Comparator.comparingInt(AbstractStationBlockEntity::getFullness).reversed())
-				.toList();
+        return BlockPos.betweenClosedStream(dronePos.offset(-15, -15, -15), dronePos.offset(15, 15, 15))
+                .map(pos -> this.droneEntity.level.getBlockEntity(pos))
+                .filter(blockEntity -> blockEntity instanceof SourceStationBlockEntity)
+                .map(blockEntity -> (SourceStationBlockEntity) blockEntity)
+                .sorted(Comparator.comparingInt(AbstractStationBlockEntity::getFullness).reversed())
+                .collect(Collectors.toList());
 	}
 
 	private boolean sourceIsValid(SourceStationBlockEntity blockEntity) {
