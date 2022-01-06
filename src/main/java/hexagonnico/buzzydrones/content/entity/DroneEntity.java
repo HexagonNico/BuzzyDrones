@@ -163,11 +163,10 @@ public class DroneEntity extends PathfinderMob {
 	public void die(DamageSource cause) {
 		super.die(cause);
 		this.dropItemCarried(this.position());
-		if(!cause.isCreativePlayer()) {
-			if(this.type == BASIC)
-				Block.popResource(this.level, this.blockPosition(), new ItemStack(BuzzyDronesItems.DRONE.get()));
-			else if(this.type == PICK_UP)
-				Block.popResource(this.level, this.blockPosition(), new ItemStack(BuzzyDronesItems.DRONE_PICK_UP.get()));
+		if(!cause.isCreativePlayer() || this.hasCustomName()) {
+			ItemStack item = new ItemStack(this.type == BASIC ? BuzzyDronesItems.DRONE.get() : BuzzyDronesItems.DRONE_PICK_UP.get());
+			if(this.hasCustomName()) item.setHoverName(this.getCustomName());
+			Block.popResource(this.level, this.blockPosition(), item);
 		}
 	}
 

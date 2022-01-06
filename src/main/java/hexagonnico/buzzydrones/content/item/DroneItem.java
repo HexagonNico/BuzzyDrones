@@ -35,6 +35,9 @@ public class DroneItem extends Item {
 			BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
 			context.getItemInHand().shrink(1);
 			droneEntity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			if(context.getItemInHand().hasCustomHoverName()) {
+				droneEntity.setCustomName(context.getItemInHand().getHoverName());
+			}
 			level.addFreshEntity(droneEntity);
 			return InteractionResult.CONSUME;
 		}
