@@ -1,10 +1,10 @@
 package hexagonnico.buzzydrones.registry;
 
 import hexagonnico.buzzydrones.BuzzyDrones;
-import hexagonnico.buzzydrones.common.container.SourceStationContainer;
-import hexagonnico.buzzydrones.common.container.TargetStationContainer;
-import hexagonnico.buzzydrones.common.gui.screen.SourceGuiScreen;
-import hexagonnico.buzzydrones.common.gui.screen.TargetGuiScreen;
+import hexagonnico.buzzydrones.content.container.SourceStationContainer;
+import hexagonnico.buzzydrones.content.container.TargetStationContainer;
+import hexagonnico.buzzydrones.content.gui.screen.SourceGuiScreen;
+import hexagonnico.buzzydrones.content.gui.screen.TargetGuiScreen;
 
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;

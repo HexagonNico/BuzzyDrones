@@ -1,8 +1,8 @@
 package hexagonnico.buzzydrones.registry;
 
 import hexagonnico.buzzydrones.BuzzyDrones;
-import hexagonnico.buzzydrones.common.entity.DroneEntity;
-import hexagonnico.buzzydrones.common.renderer.DroneRenderer;
+import hexagonnico.buzzydrones.content.entity.DroneEntity;
+import hexagonnico.buzzydrones.content.renderer.DroneRenderer;
 
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.RegistryObject;

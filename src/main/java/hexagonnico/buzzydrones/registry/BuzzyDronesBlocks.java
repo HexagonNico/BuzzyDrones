@@ -1,9 +1,9 @@
 package hexagonnico.buzzydrones.registry;
 
 import hexagonnico.buzzydrones.BuzzyDrones;
-import hexagonnico.buzzydrones.common.block.IdleStationBlock;
-import hexagonnico.buzzydrones.common.block.SourceStationBlock;
-import hexagonnico.buzzydrones.common.block.TargetStationBlock;
+import hexagonnico.buzzydrones.content.block.IdleStationBlock;
+import hexagonnico.buzzydrones.content.block.SourceStationBlock;
+import hexagonnico.buzzydrones.content.block.TargetStationBlock;
 
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

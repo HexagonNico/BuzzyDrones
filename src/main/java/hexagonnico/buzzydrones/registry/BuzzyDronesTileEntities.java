@@ -1,9 +1,9 @@
 package hexagonnico.buzzydrones.registry;
 
 import hexagonnico.buzzydrones.BuzzyDrones;
-import hexagonnico.buzzydrones.common.tileentity.IdleStationTileEntity;
-import hexagonnico.buzzydrones.common.tileentity.SourceStationTileEntity;
-import hexagonnico.buzzydrones.common.tileentity.TargetStationTileEntity;
+import hexagonnico.buzzydrones.content.tileentity.IdleStationTileEntity;
+import hexagonnico.buzzydrones.content.tileentity.SourceStationTileEntity;
+import hexagonnico.buzzydrones.content.tileentity.TargetStationTileEntity;
 
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
