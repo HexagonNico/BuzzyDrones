@@ -1,5 +1,5 @@
 
-![Buzzy Drones](https://imgur.com/0wsNOcq.png)
+![Buzzy Drones](src/main/resources/BuzzyDrones.png)
 
 ### Buzzy Drones is a mod that adds bee-like drones to move items around!
 
@@ -8,17 +8,29 @@ They don't need to be configured in any way, they can figure out what you want t
 
 Drones are not more efficient than conveyor belts or item pipes, they are just a fun way of doing a simple task like moving items between containers.
 
-## Links
+For a quick overview of the mod's features, check out the main page:
 
 * [CurseForge page](https://www.curseforge.com/minecraft/mc-mods/buzzy-drones)
+
+For a more detailed explanation, read the wiki:
+
 * [Wiki](https://github.com/HexagonNico/BuzzyDrones/wiki)
+
+## Additional information
+
+Author: HexagonNico
+
+You may use this mod in any modpack as long as you do not sell it via any means and you give credit to the original author.
+
+## Support
+
+If you like Reworked Metals and you would like to support the project,
+you can do so by supporting me on [Ko-fi](https://ko-fi.com/hexagonnico)
 
 ## License
 
-Copyright (c) 2021 HexagonNico.
+Copyright (c) 2021 HexagonNico
 
 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
 
-## Support the project
-
-* [Donate](https://www.paypal.com/donate/?return=https://www.curseforge.com/projects/460283&cn=Add+special+instructions+to+the+addon+author()&business=nico.hex6%40gmail.com&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted&cancel_return=https://www.curseforge.com/projects/460283&lc=US&item_name=Buzzy+Drones+(from+curseforge.com)&cmd=_donations&rm=1&no_shipping=1&currency_code=USD)
+See LICENSE
