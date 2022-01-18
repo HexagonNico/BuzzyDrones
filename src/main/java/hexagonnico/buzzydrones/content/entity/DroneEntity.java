@@ -98,6 +98,11 @@ public class DroneEntity extends CreatureEntity {
 		this.entityData.define(STATUS, Status.ERROR.index);
 	}
 
+	@Override
+	public boolean removeWhenFarAway(double d) {
+		return false;
+	}
+
 	public boolean isCarryingItems() {
 		return !this.carrying.isEmpty();
 	}
