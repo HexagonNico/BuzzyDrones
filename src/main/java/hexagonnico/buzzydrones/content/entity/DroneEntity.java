@@ -99,8 +99,8 @@ public class DroneEntity extends CreatureEntity {
 	}
 
 	protected boolean canDespawn() {
-        return false;
-    }
+		return false;
+	}
 
 	public boolean isCarryingItems() {
 		return !this.carrying.isEmpty();
