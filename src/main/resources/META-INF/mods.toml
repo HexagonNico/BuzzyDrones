@@ -6,7 +6,7 @@ issueTrackerURL="https://github.com/HexagonNico/BuzzyDrones/issues"
 
 [[mods]]
     modId="buzzydrones"
-    version="2.0.1"
+    version="2.0.2"
     displayName="Buzzy Drones"
     #updateJSONURL="https://change.me.example.invalid/updates.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/buzzy-drones"
