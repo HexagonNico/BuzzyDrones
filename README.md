@@ -31,6 +31,6 @@ you can do so by supporting me on [Ko-fi](https://ko-fi.com/hexagonnico)
 
 Copyright (c) 2021 HexagonNico
 
-Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0
 
 See LICENSE
